@@ -1,0 +1,101 @@
+### Ignore Patterns for Mac OS X
+### Copy of GitHub’s macOS.gitignore
+### https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
+
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Ignore Patterns from Eclipse
+### Copied from GitHub’s Eclipse.gitignore
+### https://github.com/github/gitignore/blob/master/Global/Eclipse.gitignore
+###
+### Note that Eclipse’s .classpath and .project folders are NOT ignored!
+### This is per the advice of the Eclipse Wiki FAQ:
+### “FAQ How do I set up a Java project to share in a repository?”
+### “
+### Make sure that the .project and .classpath files are under version control.
+### These files must be stored in the repository so that other users checking out
+### the projects for the first time will get the correct type of project
+### and will get the correct Java build path.
+### “
+### http://wiki.eclipse.org/FAQ_How_do_I_set_up_a_Java_project_to_share_in_a_repository%3F
+
+.metadata
+bin/
+tmp/
+
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# CDT- autotools 
+.autotools
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# Tern plugin
+.tern-project
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# Code Recommenders
+.recommenders/
+
+# Scala IDE specific (Scala & Java development for Eclipse)
+.cache-main
+.scala_dependencies
+.worksheet
