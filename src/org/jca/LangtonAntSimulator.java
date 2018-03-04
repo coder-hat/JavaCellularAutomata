@@ -7,9 +7,8 @@ import org.jca.RectangularGridGeometry.Direction;
 
 public class LangtonAntSimulator
 {
-    
     public static void main(String[] args) {
-        LangtonAntEngine antEngine = new LangtonAntEngine(100, 75, true, Direction.LEFT);
+        LangtonAntEngine antEngine = new LangtonAntEngine(75, 55, true, Direction.LEFT);
         LangtonAntForm antForm = new LangtonAntForm(antEngine);
         antForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         antForm.pack();

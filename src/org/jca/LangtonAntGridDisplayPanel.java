@@ -24,14 +24,20 @@ public class LangtonAntGridDisplayPanel extends JPanel
     private static Color antColor = Color.orange;
     
     private final int pxCellSepSize = 1;
-    private final int pxCellSize = 7;
+    private final int pxCellSize = 11;
     private final int pxShim = (pxCellSepSize + pxCellSize);
     private final int pyShim = pxShim;
     
     private LangtonAntEngine antEngine;
     private RectangularGridGeometry antGrid;
     
+    /**
+     * The total width (in pixels) of the grid display.
+     */
     private int pxTotalWide;
+    /**
+     * The total height (in pixels) of the grid display.
+     */
     private int pxTotalHigh;
     
     public LangtonAntGridDisplayPanel(LangtonAntEngine antEngine) {
@@ -46,6 +52,7 @@ public class LangtonAntGridDisplayPanel extends JPanel
 
     @Override
     protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         for (int iCell = 0; iCell < antGrid.getCellCount(); ++iCell) {
             g.setColor(cellColors.get(antEngine.getState(iCell)));
             g.fillRect(getXpx(iCell), getYpx(iCell), pxCellSize, pxCellSize);

@@ -67,7 +67,7 @@ public class LangtonAntEngine
         for (int iCell = 0; iCell < cells.length; ++iCell) {
             cells[iCell] = CellState.WHITE;
         }
-        iAnt = grid.getCellCount() / 2;
+        iAnt = grid.getCenterI();
         antFacing = initialFacing;    
     }
     

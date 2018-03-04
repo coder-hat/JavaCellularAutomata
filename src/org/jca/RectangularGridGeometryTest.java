@@ -108,6 +108,18 @@ public class RectangularGridGeometryTest
         String actual = grid.toString();
         assertThat(actual, equalTo(expect));
     }
+    
+    @Test
+    public void testGetCenterI() {
+        RectangularGridGeometry grid = new RectangularGridGeometry(1, 1, false);
+        assertThat(grid.toString(), grid.getCenterI(), equalTo(0));
+        
+        grid = new RectangularGridGeometry(7, 7, true);
+        assertThat(grid.toString(), grid.getCenterI(), equalTo(grid.getI(3, 3)));
+        // A 7x7 and an 8x8 grid should have the same center cell.
+        grid = new RectangularGridGeometry(8, 8, false);
+        assertThat(grid.toString(), grid.getCenterI(), equalTo(grid.getI(3, 3)));
+    }
 
     @Test
     public void testGetI() {

@@ -27,15 +27,15 @@ public class LangtonAntForm extends JFrame
         gridPanel = new LangtonAntGridDisplayPanel(this.antEngine);
         
         btnStep = new JButton("STEP");
+
         btnStep.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            @Override public void actionPerformed(ActionEvent e) {
                 antEngine.moveAnt();
                 gridPanel.repaint();
             }
         });
-        
+
         this.add(gridPanel, BorderLayout.CENTER);
-        this.add(btnStep, BorderLayout.SOUTH);
+        this.add(btnStep, BorderLayout.SOUTH);        
     }
 }

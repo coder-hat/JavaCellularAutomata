@@ -153,6 +153,41 @@ public class RectangularGridGeometry
         return cellCount;
     }
     
+    /**
+     * Gets the linear index of the cell nearest the center of the 2d grid.
+     * <p>
+     * The precise location depends upon whether the grid has even or odd
+     * numbers of rows and/or columns.<br>
+     * When the row or column count is odd, the actual center index of the row
+     * or column is used to calculated the linear index.<br>
+     * When the row or column count is even, the lower index of the two "center"
+     * indices of the row or column is used to calculate the linear index.
+     * 
+     * @return The linear index of the cell nearest the center of the 2d grid.
+     */
+    public int getCenterI() {
+        final int xCell = colCount / 2 - (colCount % 2 == 0 ? 1 : 0);
+        final int yCell = rowCount / 2 - (rowCount % 2 == 0 ? 1 : 0);
+        return getI(xCell, yCell);
+    }
+    
+    /**
+     * Gets the linear index of the cell at the specified 2d grid location.
+     * <p>
+     * When the grid object is not a torus
+     * 
+     * @param xCell
+     *            The x-coordinate (column index) of the cell to get the linear
+     *            index of.
+     * @param yCell
+     *            The y-coordinate (row index) of the cell to get the linear
+     *            index of.
+     * 
+     * @return The linear index of the cell at the specified 2d grid location,
+     *         or {@link RectangularGridGeometry#OFF_GRID_INDEX OFF_GRID_INDEX}
+     *         if the grid is not a torus and either of the specified 2d
+     *         coordinates are off-grid.
+     */
     public int getI(int xCell, int yCell) {
         if (xCell < 0 || xCell >= colCount) {
             if (isTorus) {
