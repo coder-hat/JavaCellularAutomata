@@ -47,7 +47,7 @@ public class LangtonAntGridDisplayPanel extends JPanel
         pxTotalHigh = pxShim * antGrid.getRowCount() + pxCellSepSize;
         setBackground(Color.lightGray);
         setPreferredSize(new Dimension(pxTotalWide, pxTotalHigh));
-        setDoubleBuffered(true);
+        //setDoubleBuffered(true);  // 2018-3-04 Runtime testing indicates no flicker with this commented-out.
     }
 
     @Override

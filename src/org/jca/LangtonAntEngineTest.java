@@ -47,7 +47,7 @@ public class LangtonAntEngineTest
         LangtonAntEngine antEngine = new LangtonAntEngine(5, 5, false, Direction.LEFT);
         
         for (int i=0; i < moves; i++) {
-            antEngine.moveAnt();
+            antEngine.doSimulationStep();
         }
 
         assertThat(String.format("ant location after %1$s moves", moves), antEngine.getAntLocation(), equalTo(expectLocation));

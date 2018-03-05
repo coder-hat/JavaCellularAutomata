@@ -41,7 +41,7 @@ public class LangtonAntEngine
     }
     
     
-    public void moveAnt() {
+    public void doSimulationStep() {
         antFacing = cells[iAnt]  == CellState.WHITE ? antFacing.rotateRight90() : antFacing.rotateLeft90();
         flipCellState(iAnt);
         iAnt = grid.getAdjacentI(iAnt, antFacing);
