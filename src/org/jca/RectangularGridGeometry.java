@@ -9,7 +9,7 @@ import java.util.List;
  * <p>
  * In addition to dimensions and torus status, RectangularGridGeometry provides:
  * <ul>
- * <li>An enum defining {@link Direction}s relative to a given cell location within the grid.</li>
+ * <li>An enum defining {@link Direction directions} relative to a given cell location within the grid.</li>
  * <li>Methods that translate between 2d coordinates and 1d linear indices.</li>
  * <li>Methods that provide the linear indices of a given cell location's adjacent cells.</li>
  * </ul>
