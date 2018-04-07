@@ -8,6 +8,10 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+/**
+ * @deprecated 2018-4-07 Use RectangularGridDisplayPanel instance (with appropriate ctor args) instead.
+ */
+@Deprecated // 2018-4-07 Use RectangularGridDisplayPanel instance (with appropriate ctor args) instead.
 public class ConwayLifeGridDisplayPanel extends JPanel
 {
     /**

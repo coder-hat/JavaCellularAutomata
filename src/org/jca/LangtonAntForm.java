@@ -1,9 +1,12 @@
 package org.jca;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -11,6 +14,43 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
+
+
+/**
+ * Provides cell {@link Color} values based on {@link LangtonAntEngine} {@link LangtonAntEngine#CellState CellState}
+ * values.
+ * 
+ * @author ksdj (coder-hat)
+ */final class AntGridColorist implements IGridColorProvider
+{
+    private static Map<LangtonAntEngine.CellState, Color> cellColors;
+    static {
+        cellColors = new HashMap<>();
+        cellColors.put(LangtonAntEngine.CellState.WHITE, Color.white);
+        cellColors.put(LangtonAntEngine.CellState.BLACK, Color.black);
+    }
+    private static Color antColor = Color.orange;
+    
+    private LangtonAntEngine antEngine;
+
+    public AntGridColorist(LangtonAntEngine antEngine) {
+        this.antEngine = antEngine;
+    }
+    
+    @Override
+    public Color getCellColor(int iCell) {
+        if (iCell == antEngine.getAntLocation()) {
+            return antColor;
+        } else {
+            return cellColors.get(antEngine.getState(iCell));
+        }
+    }
+
+    @Override
+    public Color getBackgroundColor() {
+        return Color.lightGray;
+    }
+}
 
 
 public class LangtonAntForm extends JFrame
@@ -27,7 +67,7 @@ public class LangtonAntForm extends JFrame
     private JLabel lblStatus;
     private String fmtStatus;
     
-    private JPanel pnlGrid;
+    private RectangularGridDisplayPanel pnlGrid;
     
     private JPanel pnlButtons;
     
@@ -52,7 +92,7 @@ public class LangtonAntForm extends JFrame
         lblStatus.setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3));
         lblStatus.setText(makeStatusText());
 
-        pnlGrid = new LangtonAntGridDisplayPanel(this.antEngine);
+        pnlGrid = new RectangularGridDisplayPanel(this.antEngine.getGrid(), new AntGridColorist(this.antEngine));
         
         btnStep = new JButton("STEP");
         btnStep.addActionListener(new StepSimulatorAction());
