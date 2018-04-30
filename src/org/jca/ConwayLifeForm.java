@@ -1,9 +1,12 @@
 package org.jca;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -11,6 +14,39 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
+
+
+/**
+ * Provides cell {@link Color} values based on {@link ConwayLifeEngine} {@link ConfwayLifeEngine#CellState CellState}
+ * values.
+ * 
+ * @author ksdj (coder-hat)
+ */
+final class LifeGridColorist implements IGridColorProvider
+{
+    private static Map<ConwayLifeEngine.CellState, Color> cellColors;
+    static {
+        cellColors = new HashMap<>();
+        cellColors.put(ConwayLifeEngine.CellState.DEAD, Color.white);
+        cellColors.put(ConwayLifeEngine.CellState.LIVE, Color.green);
+    }
+    
+    private ConwayLifeEngine simEngine;
+
+    public LifeGridColorist(ConwayLifeEngine simEngine) {
+        this.simEngine = simEngine;
+    }
+    
+    @Override
+    public Color getCellColor(int iCell) {
+        return cellColors.get(simEngine.getState(iCell));
+    }
+
+    @Override
+    public Color getBackgroundColor() {
+        return Color.lightGray;
+    }
+}
 
 
 public class ConwayLifeForm extends JFrame
@@ -27,7 +63,7 @@ public class ConwayLifeForm extends JFrame
     private JLabel lblStatus;
     private String fmtStatus;
     
-    private JPanel pnlGrid;
+    private RectangularGridDisplayPanel pnlGrid;
     
     private JPanel pnlButtons;
     
@@ -35,6 +71,7 @@ public class ConwayLifeForm extends JFrame
     private JButton btnStart;
     private JButton btnStop;
     private JButton btnReset;
+    
     
     public ConwayLifeForm(ConwayLifeEngine simEngine) {
         this.simEngine = simEngine;
@@ -49,7 +86,7 @@ public class ConwayLifeForm extends JFrame
         lblStatus.setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3));
         lblStatus.setText(makeStatusText());
 
-        pnlGrid = new ConwayLifeGridDisplayPanel(this.simEngine);
+        pnlGrid = new RectangularGridDisplayPanel(this.simEngine.getGrid(), new LifeGridColorist(simEngine));
         
         btnStep = new JButton("STEP");
         btnStep.addActionListener(new StepSimulatorAction());
@@ -67,11 +104,13 @@ public class ConwayLifeForm extends JFrame
         pnlButtons.add(btnStep);        
         pnlButtons.add(btnStart);        
         pnlButtons.add(btnStop);        
-        pnlButtons.add(btnReset);        
+        pnlButtons.add(btnReset);
 
         this.add(lblStatus, BorderLayout.NORTH);
         this.add(pnlGrid, BorderLayout.CENTER);
         this.add(pnlButtons, BorderLayout.SOUTH);
+        
+        this.setTitle("Conway's Game of Life");
     }
     
     private String makeStatusText(){
