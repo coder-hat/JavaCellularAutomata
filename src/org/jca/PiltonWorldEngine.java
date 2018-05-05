@@ -40,6 +40,10 @@ public class PiltonWorldEngine
      */
     private int timestep;
     
+    /**
+     * The set of {@link PiltonParticles} that comprise the PiltonWorldEngine's "universe"
+     * at the current {@link PiltonWorldEngine#timestep timestep}.
+     */
     private List<PiltonParticle> nowParticles;
     
     
@@ -64,6 +68,14 @@ public class PiltonWorldEngine
     public void resetWorld() {
         timestep = 0;
         nowParticles = new ArrayList<>();
+    }
+    
+    public int getTimestep() {
+        return timestep;
+    }
+    
+    public List<PiltonParticle> getParticles() {
+        return new ArrayList<>(nowParticles);
     }
     
     public void setParticles(List<PiltonParticle> particles) {

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Contains the state (2-d position and mass) of single Pilton Particle.
+ * Contains the state (2-d position and mass) of a single Pilton Particle.
  *  
  * @author ksdj (code-hat)
  */
@@ -26,18 +26,35 @@ final class PiltonParticle
         this.mass = other.mass;
     }
     
+    /**
+     * @return The x-coordinate of this particle's location.
+     */
     public int x() {
         return x;
     }
     
+    /**
+     * @return The y-coordinate of this particle's location.
+     */
     public int y() {
         return y;
     }
     
+    /**
+     * @return This particle's mass.
+     */
     public int mass() {
         return mass;
     }
-        
+    
+    /**
+     * Determines whether the specified other particle occupies the same location as this particle.
+     * 
+     * @param other
+     *            The particle to test for colocation.
+     *            
+     * @return true if the other particle and this particle are colocated, otherwise false.
+     */
     public boolean isColocated(PiltonParticle other) {
         return other.x() == x && other.y() == y;
     }
