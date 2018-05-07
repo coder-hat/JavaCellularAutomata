@@ -4,12 +4,13 @@ import static java.util.stream.Collectors.toList;
 import static org.jca.RectangularGridGeometry.wrappedModulo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 
@@ -130,15 +131,43 @@ public class PiltonWorldEngine
         return nxtParticles;
     }
     
-    protected List<PiltonParticle> coalesceParticles(List<PiltonParticle> particles) {
-        Map<PiltonParticle, Integer> nu = new HashMap<>();
-        for (PiltonParticle p : particles) {
-            if (!nu.containsKey(p)) {
-                nu.put(p, p.mass());
+    /**
+     * Implements a Comparator that compares PiltonParticle objects based only on their x and y location values.
+     * Particle mass is ignored. The ordering prioritizes x over y (sort by column, then by row), so, for example,
+     * particles x3y0m1, x5y0m2, and x6,y0m2 are all "less" than x0y1m1.
+     * <p>
+     * The {@link PiltonWorldEngine#coalesceParticles(List) coalesceParticles} method uses a {@link TreeMap} and this
+     * Comparator implementation to aggregate masses at specific locations.
+     * <p>
+     * The coalesceParticles code could instantiate this inline as a lambda or anonymous function, but declaring and
+     * defining it here avoids repeated instances.
+     * 
+     * @author ksdj (coder-hat)
+     */
+    private static class LocationComparator implements Comparator<PiltonParticle> {
+        @Override public int compare(PiltonParticle p1, PiltonParticle p2) {
+            if (p1.x() < p2.x()) {
+                return -1;
+            } else if (p1.x() > p2.x()) {
+                return 1;
             } else {
-                nu.put(p, nu.get(p) + p.mass());
+                if (p1.y() < p2.y()) {
+                    return -1;
+                } else if (p1.y() > p2.y()) {
+                    return 1;
+                }
             }
+            return 0;
         }
+    }
+    /**
+     * Single-instance of the {@link LocationComparator} required by the coalesceParticles code.
+     */
+    private static final Comparator<PiltonParticle> PARTICLE_LOCATION_COMPARATOR = new LocationComparator();
+    
+    protected List<PiltonParticle> coalesceParticles(List<PiltonParticle> particles) {
+        Map<PiltonParticle, Integer> nu = new TreeMap<>(PARTICLE_LOCATION_COMPARATOR);
+        particles.stream().forEach(p -> nu.put(p, (nu.containsKey(p) ? nu.get(p) + p.mass() : p.mass())));
         return nu.entrySet().stream().map(en -> new PiltonParticle(en.getKey().x(), en.getKey().y(), en.getValue())).collect(toList());
     }
     

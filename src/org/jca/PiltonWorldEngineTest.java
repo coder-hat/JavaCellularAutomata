@@ -1,7 +1,8 @@
 package org.jca;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,38 @@ import org.junit.Test;
 
 public class PiltonWorldEngineTest
 {
+    /**
+     * A Map&lt;timestep, List&lt;PiltonParticle&gt;&gt; object that contains the states (timestep and Particles) of
+     * Pilton's Small World listed in <a href="https://ianstewartjoat.weebly.com/manifold-5.html">the text of the
+     * original article</a>, assuming an initial state of: &lt;0, [x3y2m1]&gt;.
+     * <p>
+     * The keySet() of timesteps is not contiguous -- the original article elided some steps in the example provided --
+     * hence the use of a Map instead of a List or Array; the timestep cannot be implied by index.
+     */
+    private final static Map<Integer, List<PiltonParticle>> EXPECT_WORLD_SEQUENCE;
+    static {
+        EXPECT_WORLD_SEQUENCE = new HashMap<>();
+        EXPECT_WORLD_SEQUENCE.put(0,buildParticles(new int[] {3,2,1}));
+        EXPECT_WORLD_SEQUENCE.put(1,buildParticles(new int[] {0,0, 0,2, 2,0, 2,2}, 1));
+        EXPECT_WORLD_SEQUENCE.put(2,buildParticles(new int[] {5,5, 5,3, 3,5, 3,3}, 1));
+        EXPECT_WORLD_SEQUENCE.put(3,buildParticles(new int[] {5,5, 5,0, 0,5, 0,0}, 1));
+        EXPECT_WORLD_SEQUENCE.put(4,buildParticles(new int[] {6,6, 5,6, 6,5, 5,5, 6,3, 5,3, 3,6, 3,5, 3,3}, 1));
+        EXPECT_WORLD_SEQUENCE.put(5,buildParticles(new int[] {0,0,4, 4,2,2, 2,4,2, 6,6,1, 6,4,1, 4,6,1, 4,4,1}));
+        EXPECT_WORLD_SEQUENCE.put(6,buildParticles(new int[] {0,0,5, 2,4,2, 4,2,2, 0,2,1, 2,0,1, 2,2,1}));
+        EXPECT_WORLD_SEQUENCE.put(7,buildParticles(new int[] {0,0,5, 2,4,3, 4,2,3, 2,2,1}));
+        EXPECT_WORLD_SEQUENCE.put(8,buildParticles(new int[] {0,0,6, 2,4,3, 4,2,3}));
+        EXPECT_WORLD_SEQUENCE.put(9,buildParticles(new int[] {0,0,6, 5,3,3, 3,5,3})); 
+        EXPECT_WORLD_SEQUENCE.put(12,buildParticles(new int[] {2,2,6, 4,6,3, 6,4,3})); 
+        EXPECT_WORLD_SEQUENCE.put(15,buildParticles(new int[] {2,2,6, 3,0,3, 0,3,3})); 
+        EXPECT_WORLD_SEQUENCE.put(18,buildParticles(new int[] {3,3,6, 3,5,6, 3,6,3, 5,3,6, 6,3,3, 5,5,6})); 
+        EXPECT_WORLD_SEQUENCE.put(21,buildParticles(new int[] {3,3,6, 3,5,6, 6,1,3, 5,3,6, 1,6,3, 5,5,6})); 
+        EXPECT_WORLD_SEQUENCE.put(24,buildParticles(new int[] {0,0,6, 0,5,6, 4,2,3, 5,0,6, 2,4,3, 5,5,6})); 
+        EXPECT_WORLD_SEQUENCE.put(27,buildParticles(new int[] {0,0,6, 0,1,3, 1,0,3, 0,5,6, 1,5,3, 5,0,6, 5,1,3, 5,5,6})); 
+        EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {3,3,12, 3,1,9, 1,3,9, 6,6,6})); 
+        EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {4,4,12, 4,6,9, 6,4,9, 0,0,6, 0,2,6, 2,0,6, 2,2,6})); 
+    }
+    
+    final static String fmt = "t=%1$s expect=%2$s actual=%3$s";
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -42,56 +75,53 @@ public class PiltonWorldEngineTest
         assertThat("initial timestep zero", pwEngine.getTimestep(), equalTo(0));
         assertThat("no initial particles", pwEngine.getParticles().isEmpty(), equalTo(true));
     }
-
-    /**
-     * Tests the first 10 steps of a {@link PiltonWorldEngine}.
-     * The engine object is configured according to the original paper's description
-     * and its first 10 timesteps (including start state) should match the values
-     * noted in the paper.
-     * <p>
-     * Admittedly, this is more of a regression test than a simple unit test.
-     */
+    
     @Test
-    public void testDoSimulationStep() {
-        List<List<PiltonParticle>> allExpected = new ArrayList<>();
-        allExpected.add(buildParticles(new int[] {3,2,1})); // t=0
-        allExpected.add(buildParticles(new int[] {0,0, 0,2, 2,0, 2,2}, 1)); // t=1
-        allExpected.add(buildParticles(new int[] {5,5, 5,3, 3,5, 3,3}, 1)); // t=2
-        allExpected.add(buildParticles(new int[] {5,5, 5,0, 0,5, 0,0}, 1)); // t=3
-        allExpected.add(buildParticles(new int[] {6,6, 5,6, 6,5, 5,5, 6,3, 5,3, 3,6, 3,5, 3,3}, 1)); // t=4
-        allExpected.add(buildParticles(new int[] {0,0,4, 4,2,2, 2,4,2, 6,6,1, 6,4,1, 4,6,1, 4,4,1})); // t=5
-        allExpected.add(buildParticles(new int[] {0,0,5, 2,4,2, 4,2,2, 0,2,1, 2,0,1, 2,2,1})); // t=6
-        allExpected.add(buildParticles(new int[] {0,0,5, 2,4,3, 4,2,3, 2,2,1})); // t=7
-        allExpected.add(buildParticles(new int[] {0,0,6, 2,4,3, 4,2,3})); // t=8
-        allExpected.add(buildParticles(new int[] {0,0,6, 5,3,3, 3,5,3})); // t=9
-        
+    public void testSetAndGetParticles() {
         PiltonWorldEngine pwEngine = new PiltonWorldEngine();
-        pwEngine.setParticles(allExpected.get(0));
-        
-        final String fmt = "t=%1$s expect=%2$s actual=%3$s";
-        
-        List<PiltonParticle> expect = allExpected.get(pwEngine.getTimestep());
-        List<PiltonParticle> actual = pwEngine.getParticles();
-        String msg = String.format(fmt, pwEngine.getTimestep(), expect, actual);
-        assertTrue("Initial " + msg, orderIgnoredEqual(actual, expect));
-        
-        while (pwEngine.getTimestep() < 10) {
-            pwEngine.doSimulationStep();
-            expect = allExpected.get(pwEngine.getTimestep());
-            actual = pwEngine.getParticles();
-            msg = String.format(fmt, pwEngine.getTimestep(), expect, actual);
-            assertTrue(msg, orderIgnoredEqual(actual, expect));
+        assertThat("no initial particles", pwEngine.getParticles().isEmpty(), equalTo(true));
+        for (int t : EXPECT_WORLD_SEQUENCE.keySet()) {
+            List<PiltonParticle> expect = EXPECT_WORLD_SEQUENCE.get(t);
+            pwEngine.setParticles(EXPECT_WORLD_SEQUENCE.get(t));
+            List<PiltonParticle> actual = pwEngine.getParticles();
+            assertThat(String.format(fmt, t, expect, actual), actual, equalTo(expect));
         }
     }
     
+    @Test
+    public void testDoSimulationStep() {
+        PiltonWorldEngine pwEngine = new PiltonWorldEngine();
+        pwEngine.setParticles(EXPECT_WORLD_SEQUENCE.get(0));
+        
+        final int maxTimestep = EXPECT_WORLD_SEQUENCE.keySet().stream().mapToInt(Integer::intValue).max().orElse(0);
+        assertTrue("Has-data check", maxTimestep > 0);
+        
+        while (pwEngine.getTimestep() < maxTimestep) {
+            pwEngine.doSimulationStep();
+            final int t = pwEngine.getTimestep();
+            if (EXPECT_WORLD_SEQUENCE.containsKey(t)) {
+                List<PiltonParticle> expect = EXPECT_WORLD_SEQUENCE.get(t);
+                List<PiltonParticle> actual = pwEngine.getParticles();
+                String msg = String.format(fmt, pwEngine.getTimestep(), expect, actual);
+                assertTrue(msg, orderIgnoredEqual(actual, expect));
+            }
+        }
+    }
     
     @Test
     public void testCoalesceParticles() {
-        List<PiltonParticle> allParticles = buildParticles(new int[] {0,0, 4,2, 2,4, 0,0, 5,5, 2,4, 0,0, 4,2, 0,0}, 1);
-        List<PiltonParticle> expect = new ArrayList<>(buildParticles(new int[] {0,0,4, 4,2,2, 2,4,2, 5,5,1}));
         PiltonWorldEngine pwEngine = new PiltonWorldEngine();
+        
+        List<PiltonParticle> allParticles = buildParticles(new int[] {0,0, 4,2, 2,4, 0,0, 5,5, 2,4, 0,0, 4,2, 0,0}, 1);
+        List<PiltonParticle> expect = buildParticles(new int[] {0,0,4, 4,2,2, 2,4,2, 5,5,1});
         List<PiltonParticle> actual = pwEngine.coalesceParticles(allParticles);
         String msg = String.format("expect=%1$s actual=%2$s", expect, actual);
+        assertTrue(msg, orderIgnoredEqual(actual, expect));
+        
+        allParticles = buildParticles(new int[] {0,0,4, 4,2,2, 2,4,2, 0,0,1, 0,2,1, 2,0,1, 2,2,1});
+        expect = buildParticles(new int[] {0,0,5, 2,4,2, 4,2,2, 0,2,1, 2,0,1, 2,2,1});
+        actual = pwEngine.coalesceParticles(allParticles);
+        msg = String.format("expect=%1$s actual=%2$s", expect, actual);
         assertTrue(msg, orderIgnoredEqual(actual, expect));
     }
 
@@ -124,7 +154,7 @@ public class PiltonWorldEngineTest
     
     // NOTE 2018-5-04
     // Using a private check-method because the recommended Hamcrest method doesn't seem
-    // to be availble:
+    // to be available:
     // import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
     // See:
     // https://stackoverflow.com/questions/22807328/assertequals-2-lists-ignore-order
