@@ -42,13 +42,26 @@ public class PiltonWorldEngineTest
         EXPECT_WORLD_SEQUENCE.put(8,buildParticles(new int[] {0,0,6, 2,4,3, 4,2,3}));
         EXPECT_WORLD_SEQUENCE.put(9,buildParticles(new int[] {0,0,6, 5,3,3, 3,5,3})); 
         EXPECT_WORLD_SEQUENCE.put(12,buildParticles(new int[] {2,2,6, 4,6,3, 6,4,3})); 
-        EXPECT_WORLD_SEQUENCE.put(15,buildParticles(new int[] {2,2,6, 3,0,3, 0,3,3})); 
-        EXPECT_WORLD_SEQUENCE.put(18,buildParticles(new int[] {3,3,6, 3,5,6, 3,6,3, 5,3,6, 6,3,3, 5,5,6})); 
-        EXPECT_WORLD_SEQUENCE.put(21,buildParticles(new int[] {3,3,6, 3,5,6, 6,1,3, 5,3,6, 1,6,3, 5,5,6})); 
-        EXPECT_WORLD_SEQUENCE.put(24,buildParticles(new int[] {0,0,6, 0,5,6, 4,2,3, 5,0,6, 2,4,3, 5,5,6})); 
-        EXPECT_WORLD_SEQUENCE.put(27,buildParticles(new int[] {0,0,6, 0,1,3, 1,0,3, 0,5,6, 1,5,3, 5,0,6, 5,1,3, 5,5,6})); 
-        EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {3,3,12, 3,1,9, 1,3,9, 6,6,6})); 
-        EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {4,4,12, 4,6,9, 6,4,9, 0,0,6, 0,2,6, 2,0,6, 2,2,6})); 
+        EXPECT_WORLD_SEQUENCE.put(15,buildParticles(new int[] {2,2,6, 2,0,3, 0,2,3})); 
+        EXPECT_WORLD_SEQUENCE.put(18,buildParticles(new int[] {3,3,6, 3,5,3, 5,3,3})); 
+        EXPECT_WORLD_SEQUENCE.put(21,buildParticles(new int[] {3,3,6, 2,6,3, 2,1,3, 6,2,3, 1,2,3})); 
+        EXPECT_WORLD_SEQUENCE.put(24,buildParticles(new int[] {5,5,6, 6,2,3, 6,0,3, 2,6,3, 0,6,3})); 
+        EXPECT_WORLD_SEQUENCE.put(27,buildParticles(new int[] {5,5,6, 0,4,3, 0,5,3, 0,0,6, 5,0,3})); 
+        EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {3,3,6, 6,1,6, 1,1,6, 1,6,6})); 
+        EXPECT_WORLD_SEQUENCE.put(36,buildParticles(new int[] {2,2,6, 6,4,6, 4,4,6, 4,6,6})); 
+        EXPECT_WORLD_SEQUENCE.put(42,buildParticles(new int[] {1,1,6, 4,6,6, 6,6,6, 6,4,6}));
+        // Bottom half of sequence from the original paper commented-out below.
+        // Based on the rules described in the same paper, this portion of the sequence is actually wrong.
+        // Hypothesis: there was a typo or miscalculation made in the original example sequence.
+        // By-hand calculation (according to the paper's rules) from t=15 through t=42 gives
+        // the bottom half of the sequence above.
+        //EXPECT_WORLD_SEQUENCE.put(15,buildParticles(new int[] {2,2,6, 3,0,3, 0,3,3})); 
+        //EXPECT_WORLD_SEQUENCE.put(18,buildParticles(new int[] {3,3,6, 3,5,6, 3,6,3, 5,3,6, 6,3,3, 5,5,6})); 
+        //EXPECT_WORLD_SEQUENCE.put(21,buildParticles(new int[] {3,3,6, 3,5,6, 6,1,3, 5,3,6, 1,6,3, 5,5,6})); 
+        //EXPECT_WORLD_SEQUENCE.put(24,buildParticles(new int[] {0,0,6, 0,5,6, 4,2,3, 5,0,6, 2,4,3, 5,5,6})); 
+        //EXPECT_WORLD_SEQUENCE.put(27,buildParticles(new int[] {0,0,6, 0,1,3, 1,0,3, 0,5,6, 1,5,3, 5,0,6, 5,1,3, 5,5,6})); 
+        //EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {3,3,12, 3,1,9, 1,3,9, 6,6,6})); 
+        //EXPECT_WORLD_SEQUENCE.put(36,buildParticles(new int[] {4,4,12, 4,6,9, 6,4,9, 0,0,6, 0,2,6, 2,0,6, 2,2,6})); 
     }
     
     final static String fmt = "t=%1$s expect=%2$s actual=%3$s";

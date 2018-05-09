@@ -85,7 +85,7 @@ public class PiltonWorldEngine
     
     public void doSimulationStep() {
         timestep += 1;  // time must increment before particle processing
-        nowParticles = decayParticles(coalesceParticles(moveParticles(nowParticles)));
+        nowParticles = coalesceParticles(decayParticles(coalesceParticles(moveParticles(nowParticles))));
     }
     
     protected Set<PiltonParticle> findMolecule(PiltonParticle p, List<PiltonParticle> particles) {
