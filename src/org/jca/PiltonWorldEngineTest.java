@@ -27,6 +27,11 @@ public class PiltonWorldEngineTest
      * <p>
      * The keySet() of timesteps is not contiguous -- the original article elided some steps in the example provided --
      * hence the use of a Map instead of a List or Array; the timestep cannot be implied by index.
+     * <p>
+     * The specific particle values in this data differ from the original article's values at and after t=15.
+     * Based on the rules/algorithm described in the article, the example sequence presented in the article itself
+     * "goes wrong" at t=15, and is suspect thereafter.  Hand-calculation of the world state from t=15 onwards, 
+     * using the articles own rules yields the sequence encoded here.
      */
     private final static Map<Integer, List<PiltonParticle>> EXPECT_WORLD_SEQUENCE;
     static {
@@ -120,6 +125,23 @@ public class PiltonWorldEngineTest
             }
         }
     }
+
+// Not a "real" test, but convenient for "I wonder what the state is at ..." questions.
+//    @Test
+//    public void testRunTo700() {
+//        // This test simply runs the simulator for an extended sequence of steps
+//        // and prints some of the last of them.
+//        // If no crash occurs, the test passes.
+//        PiltonWorldEngine pwEngine = new PiltonWorldEngine();
+//        pwEngine.setParticles(EXPECT_WORLD_SEQUENCE.get(0));
+//        final int totalSteps = 2701;
+//        for (int i=0; i < totalSteps; ++i) {
+//            pwEngine.doSimulationStep();
+//            final int t = pwEngine.getTimestep();
+//            if (totalSteps - t < 25) pwEngine.printParticles();
+//        }
+//        assertTrue("Completed run", true);
+//    }
     
     @Test
     public void testCoalesceParticles() {

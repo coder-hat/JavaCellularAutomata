@@ -3,9 +3,7 @@ package org.jca;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -71,6 +69,19 @@ public class PiltonParticleTest
     public void testMass() {
         assertThat("Reference Particle", expectP.mass(), equalTo(expectMass));
     }
+    
+    @Test 
+    public void testIsColocated() {
+        PiltonParticle p1 = new PiltonParticle(5,3,1);
+        PiltonParticle p2 = new PiltonParticle(3,5,1);
+        PiltonParticle p3 = new PiltonParticle(5,3,2);
+        
+        assertTrue("p1 unique", !(p1.equals(p2)||p1.equals(p3)));
+        assertTrue("p2 unique", !p2.equals(p3));
+        assertFalse("p1 not colocated with p2", p1.isColocated(p2));
+        assertFalse("p2 not colocated with p3", p2.isColocated(p3));
+        assertTrue("p1 and p3 ARE colocated", p3.isColocated(p1));
+    }
 
     @Test
     public void testIsAdjacent() {
@@ -106,19 +117,6 @@ public class PiltonParticleTest
         pOthers.put(new PiltonParticle(1, 0, 1), false);
     }
     
-    @Test
-    public void testIsAdjacentToAny() {        
-        List<PiltonParticle> particles = new ArrayList<>();
-        int[] x = {6, 5, 6};
-        int[] y = {6, 6, 5};
-        for (int i=0; i < y.length; ++i) {
-            particles.add(new PiltonParticle(x[i], y[i], i));
-        }
-
-        PiltonParticle p = new PiltonParticle(5, 5, 1);
-        assertThat(p.isAdjacentToAny(particles, 7, 7), equalTo(true));
-    }
-
     @Test
     public void testEqualsObject() {
         PiltonParticle p = new PiltonParticle(expectX, expectY, expectMass);
