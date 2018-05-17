@@ -1,6 +1,10 @@
 package org.jca;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
 
@@ -29,6 +34,8 @@ public class PiltonWorldForm extends JFrame
     
     private JLabel lblStatus;
     
+    private JTextArea txtParticles;
+    
     private PiltonWorldDisplayPanel pnlGrid;
     
     private JPanel pnlButtons;
@@ -42,13 +49,25 @@ public class PiltonWorldForm extends JFrame
     public PiltonWorldForm(PiltonWorldEngine simEngine) {
         this.simEngine = simEngine;
         
+        Font lblfont = new Font(Font.MONOSPACED, Font.PLAIN, 10);
+        // Use the width of a capital W as a rule-of-thumb basic width unit
+        final int wCharWidth = this.getFontMetrics(lblfont).charWidth('W');
+        
         lblStatus = new JLabel();
         // Create padding around label text.
         // Credit due to Andre L. S.'s blog entry, "Inserting padding into a JLabel" 
         // at:
         // http://www.andrels.com/wp-en_US/2009/08/inserting-padding-into-a-jlabel/
-        lblStatus.setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3));
+        lblStatus.setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3)); // (top, left, bot, right)
         lblStatus.setText(makeStatusText());
+        
+        txtParticles = new JTextArea();
+        txtParticles.setBorder(BorderFactory.createEmptyBorder(5,3,0,3));
+        txtParticles.setBackground(Color.cyan);
+        txtParticles.setPreferredSize(new Dimension(30 * wCharWidth, -1));
+        txtParticles.setEditable(false);
+        txtParticles.setLineWrap(true);  // turn on line wrap
+        txtParticles.setWrapStyleWord(true);  // wrap at word boundaries
 
         pnlGrid = new PiltonWorldDisplayPanel(grid, simEngine);
         
@@ -72,6 +91,7 @@ public class PiltonWorldForm extends JFrame
 
         this.add(lblStatus, BorderLayout.NORTH);
         this.add(pnlGrid, BorderLayout.CENTER);
+        this.add(txtParticles, BorderLayout.EAST);
         this.add(pnlButtons, BorderLayout.SOUTH);
         
         this.setTitle(String.format("Pilton Tiny World : %1$sx%2$s Universe", PiltonWorldEngine.CELL_COLS, PiltonWorldEngine.CELL_ROWS));
@@ -81,6 +101,10 @@ public class PiltonWorldForm extends JFrame
         return String.format("t=%1$s particle count=%2$s", simEngine.getTimestep(), simEngine.getParticles().size());
     }
     
+    private String makeParticlesText() {
+        return simEngine.getParticles().toString();
+    }
+    
     //----- Inner classes
     
     private class StepSimulatorAction implements ActionListener
@@ -88,6 +112,7 @@ public class PiltonWorldForm extends JFrame
         @Override public void actionPerformed(ActionEvent e) {
             simEngine.doSimulationStep();
             lblStatus.setText(makeStatusText());
+            txtParticles.setText(makeParticlesText());
             pnlGrid.repaint();
         }
     }
@@ -128,6 +153,7 @@ public class PiltonWorldForm extends JFrame
             simEngine.reset();
             simEngine.setParticles(new ArrayList<PiltonParticle>(Arrays.asList(new PiltonParticle(3, 2, 1))));
             lblStatus.setText(makeStatusText());
+            txtParticles.setText(makeParticlesText());
             pnlGrid.repaint();
         }
     }
@@ -159,6 +185,7 @@ public class PiltonWorldForm extends JFrame
                 synchronized (ae) {
                     pnlGrid.repaint();
                     lblStatus.setText(makeStatusText());
+                    txtParticles.setText(makeParticlesText());
                 }
             }
         }
