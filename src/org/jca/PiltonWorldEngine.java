@@ -47,7 +47,7 @@ public class PiltonWorldEngine
     private List<PiltonParticle> nowParticles;
 
     public PiltonWorldEngine() {
-        resetWorld();
+        reset();
     }
 
     public static void main(String[] args) {
@@ -66,7 +66,7 @@ public class PiltonWorldEngine
     /**
      * Resets this object's world state to time zero, with no particles.
      */
-    public void resetWorld() {
+    public void reset() {
         timestep = 0;
         nowParticles = new ArrayList<>();
     }
