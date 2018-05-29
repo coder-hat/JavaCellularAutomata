@@ -91,8 +91,7 @@ public class PiltonWorldEngine
     protected Set<PiltonParticle> findMolecule(PiltonParticle p, List<PiltonParticle> particles) {
         Set<PiltonParticle> molecule = new HashSet<>();
         molecule.add(p);
-        List<PiltonParticle> adjacents = particles.stream().filter(o -> p.isAdjacent(o, CELL_COLS, CELL_ROWS))
-                .collect(toList());
+        List<PiltonParticle> adjacents = particles.stream().filter(o -> p.isAdjacent(o, CELL_COLS, CELL_ROWS)).collect(toList());
         if (!adjacents.isEmpty()) {
             for (PiltonParticle o : adjacents) {
                 List<PiltonParticle> remaining = new LinkedList<PiltonParticle>(particles);

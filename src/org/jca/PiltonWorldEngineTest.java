@@ -51,7 +51,7 @@ public class PiltonWorldEngineTest
         EXPECT_WORLD_SEQUENCE.put(18,buildParticles(new int[] {3,3,6, 3,5,3, 5,3,3})); 
         EXPECT_WORLD_SEQUENCE.put(21,buildParticles(new int[] {3,3,6, 2,6,3, 2,1,3, 6,2,3, 1,2,3})); 
         EXPECT_WORLD_SEQUENCE.put(24,buildParticles(new int[] {5,5,6, 6,2,3, 6,0,3, 2,6,3, 0,6,3})); 
-        EXPECT_WORLD_SEQUENCE.put(27,buildParticles(new int[] {5,5,6, 0,4,3, 0,5,3, 0,0,6, 5,0,3})); 
+        EXPECT_WORLD_SEQUENCE.put(27,buildParticles(new int[] {5,5,6, 0,4,3, 0,5,3, 0,0,6, 5,0,3, 4,0,3})); 
         EXPECT_WORLD_SEQUENCE.put(30,buildParticles(new int[] {3,3,6, 6,1,6, 1,1,6, 1,6,6})); 
         EXPECT_WORLD_SEQUENCE.put(36,buildParticles(new int[] {2,2,6, 6,4,6, 4,4,6, 4,6,6})); 
         EXPECT_WORLD_SEQUENCE.put(42,buildParticles(new int[] {1,1,6, 4,6,6, 6,6,6, 6,4,6}));
@@ -195,6 +195,7 @@ public class PiltonWorldEngineTest
     // https://stackoverflow.com/questions/22807328/assertequals-2-lists-ignore-order
     
     private static boolean orderIgnoredEqual(Collection<PiltonParticle> particles1, Collection<PiltonParticle> particles2) {
+        if (particles1.size() != particles2.size()) return false;
         for (PiltonParticle p : particles2) {
             if (!particles1.contains(p)) {
                 return false;
